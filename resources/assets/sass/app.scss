@@ -67,7 +67,23 @@ p {
     color: #fff;
   }
 }
+#logout {
+  cursor: default;
+  &:hover {
+    background-color: transparent;
+  }
+}
 
+/* shared _message */
+.shared-msg
+{
+    animation:shared-msg 3s;
+    animation-fill-mode: forwards;
+}
+@keyframes shared-msg{
+    from{opacity: 1;}
+    to{opacity: 0;}
+}
 /* footer */
 
 footer {
