@@ -106,6 +106,13 @@ class UsersController extends Controller
         return redirect()->route('users.show',$user->id);
     }
 
+    /**
+     * 删除用户
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function destroy(User $user)
     {
         $this->authorize('destroy', $user);
@@ -114,6 +121,10 @@ class UsersController extends Controller
         return back();
     }
 
+    /**
+     * 发送激活邮箱验证码
+     * @param $user
+     */
     public function sendEmailConfirmationTo($user)
     {
         $view = 'email.confirm';
@@ -128,6 +139,11 @@ class UsersController extends Controller
         });
     }
 
+    /**
+     * 激活邮箱
+     * @param $token
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function confirmEmail($token)
     {
         $user = User::where('activation_token',$token)->firstOrFail();
@@ -140,6 +156,20 @@ class UsersController extends Controller
         session()->flash('success','恭喜，激活成功');
         return redirect()->route('users.show',[$user]);
 
+    }
+
+    public function followings(User $user)
+    {
+        $users = $user->followings()->paginate(30);
+        $title = '关注的人';
+        return view('users.show_follow', compact('users', 'title'));
+    }
+
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(30);
+        $title = '粉丝';
+        return view('users.show_follow', compact('users', 'title'));
     }
 
 }
